@@ -7,6 +7,7 @@ export default function Home() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
+  // API URL for communicating with the Django backend
   const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
 
   const fetchTasks = async () => {
