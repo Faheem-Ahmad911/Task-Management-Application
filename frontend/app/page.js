@@ -7,8 +7,10 @@ export default function Home() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+
   const fetchTasks = async () => {
-    const res = await fetch("http://127.0.0.1:8000/api/tasks/");
+    const res = await fetch(`${API_URL}/api/tasks/`);
     const data = await res.json();
     setTasks(data);
   };
@@ -18,7 +20,7 @@ export default function Home() {
   }, []);
 
   const createTask = async () => {
-    await fetch("http://127.0.0.1:8000/api/tasks/", {
+    await fetch(`${API_URL}/api/tasks/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
