@@ -85,15 +85,20 @@ TEMPLATES = [
 WSGI_APPLICATION = 'config.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/6.0/ref/settings/#databases
+# Use NEON_DATABASE_URL if defined (to bypass Vercel integrations), otherwise DATABASE_URL, otherwise local SQLite
+db_url = os.environ.get("NEON_DATABASE_URL") or os.environ.get("DATABASE_URL")
 
-DATABASES = {
-    "default": dj_database_url.config(
-        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
-        conn_max_age=600,
-    )
-}
+if db_url:
+    DATABASES = {
+        "default": dj_database_url.parse(db_url, conn_max_age=600)
+    }
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
 
 # Enforce SSL for PostgreSQL on production (Render)
 if DATABASES["default"].get("ENGINE") == "django.db.backends.postgresql":
